@@ -7,8 +7,8 @@ from util import getUrl
 sys.setrecursionlimit(1000000) 
 firstUrl="http://bhdp.blog.fc2blog.us"
 secondUrl="http://bhdp.blog.fc2blog.us/page-"
-startPage = 1
-endPage = 3
+startPage = 16
+endPage = 18
 
 error_str = ""
 
