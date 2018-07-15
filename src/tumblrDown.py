@@ -3,18 +3,47 @@ import re,sys
 from bs4 import BeautifulSoup
 import time
 from util import getUrl
+from selenium import webdriver
+import time
 
-sys.setrecursionlimit(1000000) 
+'''
+使用方式：
+https://blog.csdn.net/florachy/article/details/77750991
+按上文安装环境
+运行程序，在弹出的Firefox窗口中 选项卡 中的 安全 中选择  提示保存密码
+在手动登录网站
+在程序交互窗口中按任意键继续
+'''
+sys.setrecursionlimit(1000000)
 baseUrlList = []
 firstUrl = ''
 filePath = 'E:\\tumblr.txt'
 secondUrl=firstUrl+"/page/"
 startPage = 1
-endPage = 2
+endPage = 1
 result = {
     "img_list" : [],
     "video_list" : []
     }
+
+testFile="E:\\test.txt"
+
+driver=webdriver.Firefox()
+
+driver.get('https://www.tumblr.com/dashboard')
+#driver.maximize_window()
+input("press any key to continue")
+while True:
+    try:
+        driver.get('https://www.tumblr.com/dashboard')
+        print("complete")
+        break
+    except Exception:
+        print("wait to complete")
+        time.sleep(1)
+        continue
+
+
 
 def tumblrDownHtml():
     currentPage = startPage
@@ -32,25 +61,28 @@ def downLoader(url):
     print('downLoader: '+url)
     while True:
         try:
-            get_url = getUrl(url)
+            driver.get(url)
+            print(dir(driver))
+            data = driver.page_source
             break
-        except Exception:    
+        except Exception:
             time.sleep(1)
             continue
-    codingTypr = get_url.encoding
-    soup = BeautifulSoup(get_url.text,"html5lib")
+    #codingTypr = get_url.encoding
+    soup = BeautifulSoup(data,"html5lib")
     postList = soup.find_all("section", class_="post")
     #Analysis direct img link
     for i in postList:
         imgList = i.find_all("img")
         for j in imgList:
-            imgLink = j["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore')
+            print('$$$$'+j["src"])
+            imgLink = j["src"]
             if not imgLink.endswith(".png"):
                 print(imgLink)
                 result["img_list"].append(imgLink)
-    #Analysis iframe img link   
+    #Analysis iframe img link
     for i in postList:
-        iframeLink = i.find_all("iframe")      
+        iframeLink = i.find_all("iframe")
         for j in  iframeLink:
             print("find a iframe")
             if j["src"].startswith("http"):
@@ -59,8 +91,8 @@ def downLoader(url):
                 urlLink = "https:"+j["src"]
             else:
                 urlLink = firstUrl+j["src"]
-            print(urlLink)    
-            downIframe(urlLink)   
+            print(urlLink)
+            downIframe(urlLink)
 
 def downIframe(url):
     isVideo = False
@@ -68,10 +100,9 @@ def downIframe(url):
         try:
             get_url = getUrl(url)
             break
-        except Exception:    
+        except Exception:
             time.sleep(1)
             continue
-    codingTypr = get_url.encoding
     soup = BeautifulSoup(get_url.text,"html5lib")
     if not url.find("instagram") == -1:
         try:
@@ -79,24 +110,24 @@ def downIframe(url):
             videoLink1 = videoLink[0]
             videoLink2 = videoLink1.a
             handleInsLink('https://www.instagram.com'+videoLink2['href'])
-        except IndexError as e:  
-            print(e)    
+        except IndexError as e:
+            print(e)
         return
-    videoList = soup.find_all("video")        
+    videoList = soup.find_all("video")
     for i in videoList:
         try:
-            print(i["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))
-            result["video_list"].append(i["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))  
+            print(i["src"])
+            result["video_list"].append(i["src"])
         except KeyError:
             sourceLink = i.source
-            print(sourceLink["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))   
-            result["video_list"].append(sourceLink["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))      
+            print(sourceLink["src"])
+            result["video_list"].append(sourceLink["src"])
         isVideo = True
-        
-    if isVideo == False:    
+
+    if isVideo == False:
         imgList = soup.find_all("img")
         for j in imgList:
-            imgLink = j["src"].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore')
+            imgLink = j["src"]
             if not imgLink.endswith(".png"):
                 print(imgLink)
                 result["img_list"].append(imgLink)
@@ -107,7 +138,7 @@ def handleInsLink(url):
         try:
             get_url = getUrl(url)
             break
-        except Exception:    
+        except Exception:
             time.sleep(1)
             continue
     codingTypr = get_url.encoding
@@ -122,6 +153,7 @@ def handleInsLink(url):
             continue
 
 if __name__=="__main__":
+    print('start')
     with open(filePath, 'r', encoding='UTF-8') as f:
         baseUrlList = f.read()
     baseUrlList = re.split('\n|\s', baseUrlList)
@@ -148,20 +180,19 @@ if __name__=="__main__":
                 f.write('img:\n')
                 for i in result["img_list"]:
                     f.write(i+'\n')
-                f.write('video:\n')    
+                f.write('video:\n')
                 for i in result["video_list"]:
-                    f.write(i+'\n')  
+                    f.write(i+'\n')
         except OSError as e:
             print(e)
-        print('done') 
-        currentNum = currentNum + 1    
+        print('done')
+        currentNum = currentNum + 1
         result["img_list"] = []
-        result["video_list"] = []  
-        
-        
-        
-        
-        
-        
-        
-        
+        result["video_list"] = []
+
+
+
+
+
+
+

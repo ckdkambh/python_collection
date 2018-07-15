@@ -6,7 +6,7 @@ import sys, getopt,os
 maxSize = 100*1024000
 maxConnectTry = 300
 outpath = 'D:\\MY_DownLoad\\'
-file_url = """http://111.202.98.180/hdl1201.plures.net/onlive/78720fef3b954d58baca843af7728647.flv?txSecret=2a9ea3a4179dde2f7f503d9a73e4341a&txTime=5b2ce7d4&dispatch_from=ztc10.236.21.177&utime=1529669025242
+file_url = """https://flv-live-qn.xingxiu.panda.tv/panda-xingxiu/d62401da63517edd547647f89d46e666.flv?0.7516293586231768
 """
 
 def analysisFileName():
