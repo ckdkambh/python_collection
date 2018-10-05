@@ -20,7 +20,7 @@ firstUrl = ''
 filePath = 'E:\\tumblr.txt'
 secondUrl=firstUrl+"/page/"
 startPage = 1
-endPage = 1
+endPage = 4
 result = {
     "img_list" : [],
     "video_list" : []
@@ -62,20 +62,17 @@ def downLoader(url):
     while True:
         try:
             driver.get(url)
-            print(dir(driver))
             data = driver.page_source
             break
         except Exception:
             time.sleep(1)
             continue
-    #codingTypr = get_url.encoding
     soup = BeautifulSoup(data,"html5lib")
     postList = soup.find_all("section", class_="post")
     #Analysis direct img link
     for i in postList:
         imgList = i.find_all("img")
         for j in imgList:
-            print('$$$$'+j["src"])
             imgLink = j["src"]
             if not imgLink.endswith(".png"):
                 print(imgLink)
@@ -98,12 +95,13 @@ def downIframe(url):
     isVideo = False
     while True:
         try:
-            get_url = getUrl(url)
+            driver.get(url)
+            data = driver.page_source
             break
         except Exception:
             time.sleep(1)
             continue
-    soup = BeautifulSoup(get_url.text,"html5lib")
+    soup = BeautifulSoup(data,"html5lib")
     if not url.find("instagram") == -1:
         try:
             videoLink = soup.find_all("div", class_="EmbedFrame EmbedMedia")
@@ -136,19 +134,19 @@ def handleInsLink(url):
     print("handleInsLink: "+url)
     while True:
         try:
-            get_url = getUrl(url)
+            driver.get(url)
+            data = driver.page_source
             break
         except Exception:
             time.sleep(1)
             continue
-    codingTypr = get_url.encoding
-    soup = BeautifulSoup(get_url.text,"html5lib")
+    soup = BeautifulSoup(data,"html5lib")
     link = soup.find_all("meta")
     for i in link:
         try:
             if i['property'] == 'og:video:secure_url':
-                print(i['content'].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))
-                result["video_list"].append(i['content'].encode(codingTypr, errors='ignore').decode('utf-8', errors='ignore'))
+                print(i['content'])
+                result["video_list"].append(i['content'])
         except KeyError:
             continue
 
