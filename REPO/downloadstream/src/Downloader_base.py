@@ -8,3 +8,6 @@ class DownloaderBase(object):
     
     def get_next_link(self):
         pass
+        
+    def get_valid(self):
+        pass

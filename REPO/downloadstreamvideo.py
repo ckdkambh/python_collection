@@ -6,39 +6,27 @@ import sys, getopt,os
 maxSize = 100*1024000
 maxConnectTry = 300
 outpath = 'D:\\MY_DownLoad\\'
-file_url = """https://flv-live-ws.xingxiu.panda.tv/panda-xingxiu/3ae42880751055ae101acbe8247b2b67.flv?0.964914960321039
+file_url = """
+https://04a3179ed97963c6c1cca7008f205caa.v.smtcdns.net/mobilep2.douyucdn2.cn/dyliveflv3/5551871r139mO4BD_2000p.xs?playid=1612798270389-5560696281&uuid=fc876200-ed3e-45d1-afc3-ff4b74c3ac72&txSecret=5aa2b77016fbdc72ad662c56882ef1c6&txTime=60215b96&origin=tct
 """
 
+# True False
+# 斗鱼需要 flash模式的 高清才能下载，超清无法下载  11111 影熙热舞妖精 恩熙ovo 小深深儿 朴雨彬
+
+g_UseDirName = True 
+# Minana呀 苏恩Olivia Chance喵  张琪格 Sun佐伊  小a懿 南妹儿呀 夏只只i 性感热舞阿离 乔妹eve 大宝好哇塞呀  宝儿lucky 暴躁的鹿鹿猪  王羽杉Barbieshy 陈小花呢 Lovely璐璐酱 猫九酱O3O      暴走小卡车 萌宝绵绵Z啊 王羽杉Barbieshy 米儿啊i 素素不吃肉  淼淼喵酱呀 是Ari瑞哥 
+# 湖南小橙子 沈亦Mona 尹恩恩1 VIVI小小酥 阿让让丶 Y智恩 何菱
+
+# 秀秀呢 lone考拉  你的咪咪酱 子诺小姐姐 Ss莹莹酱 珊儿兔兔兔 MICO要抱抱 子然学姐 舞法天女小慕林 Ellin艾琳  同桌小美 Sunny温晴
+# 你的口罩表妹 陈小花呢 血色东霓 秀秀呢
+
+
+
+DirName = "Minana呀"
+
 def analysisFileName():
-    if file_url.find('live_panda/') != -1:
-        print('it is a panda tv link')
-        index1 = file_url.find('live_panda/') + len('live_panda/')
-        index2 = file_url.find('?sign')
-    elif file_url.find('huyalive/') != -1:
-        print('it is a huya tv link')
-        index1 = file_url.find('huyalive/') + len('huyalive/')
-        index2 = file_url.find('?wsSecret')
-    elif file_url.find('panda-xingxiu/') != -1:
-        print('it is a panda tv link')
-        index1 = file_url.find('panda-xingxiu/') + len('panda-xingxiu/')
-        index2 = file_url.find('?')
-    elif file_url.find('lzlive/') != -1:
-        print('it is a panda tv link')
-        index1 = file_url.find('lzlive/') + len('lzlive/')
-        index2 = file_url.find('?')
-    elif file_url.find('panda-xingyan/') != -1:
-        print('it is a panda tv link')
-        index1 = file_url.find('panda-xingyan/') + len('panda-xingyan/')
-        index2 = file_url.find('?')
-    elif file_url.find('onlive/') != -1:
-        print('it is a HUYA tv link')
-        index1 = file_url.find('onlive/') + len('onlive/')
-        index2 = file_url.find('?')
-    elif file_url.find('live.panda.tv/p2p/flv/hint?sign=') != -1:
-        print('it is a panda tv link')
-        index1 = file_url.find('&rid=') + len('&rid=')
-        index2 = file_url.find('&stream=')
-    fileName = file_url[index1:index2]
+    fileName = DirName
+    print(fileName)
     outfile = outpath+fileName
     date = datetime.now().__str__()
     date = date.replace(' ', '').replace('-', '').replace(':', '').replace('.', '')
@@ -130,7 +118,7 @@ if __name__=="__main__":
                 print('link break close current file, wait for link resume')
                 time.sleep(3)
                 continue
-        if os.path.exists(fileName) and get_FileSize(fileName) < 200:
+        if os.path.exists(fileName) and get_FileSize(fileName) < 800:
             print('file:%s too small(%dKB), delete!'%(fileName, get_FileSize(fileName)))
             try:
                 os.remove(fileName)

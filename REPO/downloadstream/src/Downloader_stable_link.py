@@ -53,6 +53,10 @@ class DownloaderStableLink(DownloaderBase):
     def __init__(self, link):
         self.link = link
         self.fileName = self.analysisFileName()
+        self.is_valid = True
+        
+    def get_valid(self):
+        return self.is_valid
         
     def analysisFileName(self):
         for type_record in kind_dict_link:
@@ -61,14 +65,20 @@ class DownloaderStableLink(DownloaderBase):
                 index1 = self.link.find(type_record['start_str']) + len(type_record['start_str'])
                 index2 = self.link.find(type_record['end_str'])
                 break
-        file_name = self.link[index1:index2]
-        outfile = outpath+file_name
-        date = datetime.now().__str__()
-        date = date.replace(' ', '').replace('-', '').replace(':', '').replace('.', '')
-        outfile = outfile.split('.')[0]+'_'+date+'.flv'
-        return outfile
+        try:
+            file_name = self.link[index1:index2]
+            outfile = outpath+file_name
+            date = datetime.now().__str__()
+            date = date.replace(' ', '').replace('-', '').replace(':', '').replace('.', '')
+            outfile = outfile.split('.')[0]+'_'+date+'.flv'
+            return outfile
+        except Exception as e:
+            self.is_valid = False
         
     def get_next_file_name(self):
+        if self.is_valid == False:
+            print("link is invalid")
+            return ""
         index1 = self.fileName.split('.')[0]
         index2 = index1.find('##')
         index3 = 1
@@ -82,3 +92,10 @@ class DownloaderStableLink(DownloaderBase):
         
     def get_next_link(self):
         return self.link
+        
+if __name__=="__main__":
+   tester = DownloaderStableLink("https://3grauymtt8rzdnqb1fahdn.ourdvsss.com/pl3.live.panda.8686c.com/live_panda/e900b5f1420886d08fe60acb82d6cec7_4000.flv?sign=fcd87c307001eb7fe60a8f47d236791f&ts=5b894f55&rid=27836296&add_index_info=1&wshc_tag=0&wsts_tag=5b894f59&wsid_tag=72f4bb6a&wsiphost=ipdbm")
+   print(tester.fileName)
+   print(tester.get_next_file_name())        
+        
+        
