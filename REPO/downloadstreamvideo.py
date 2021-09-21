@@ -7,22 +7,22 @@ maxSize = 100*1024000
 maxConnectTry = 300
 outpath = 'D:\\MY_DownLoad\\'
 file_url = """
-https://04a3179ed97963c6c1cca7008f205caa.v.smtcdns.net/mobilep2.douyucdn2.cn/dyliveflv3/5551871r139mO4BD_2000p.xs?playid=1612798270389-5560696281&uuid=fc876200-ed3e-45d1-afc3-ff4b74c3ac72&txSecret=5aa2b77016fbdc72ad662c56882ef1c6&txTime=60215b96&origin=tct
+https://f2d5b78b3ba75e91ecebaf183f56ec8c.v.smtcdns.net/mobilep2.douyucdn2.cn/dyliveflv3a/7659399rM8QMlAla.xs?playid=1631896668846-1603860141&uuid=f806ed7c-2c24-4483-a6b0-cb1c64d7a00b&txSecret=d304cdc083ba7f10f0475afcc89c2fd1&txTime=6144c6b5&origin=tct
 """
 
 # True False
 # 斗鱼需要 flash模式的 高清才能下载，超清无法下载  11111 影熙热舞妖精 恩熙ovo 小深深儿 朴雨彬
 
 g_UseDirName = True 
-# Minana呀 苏恩Olivia Chance喵  张琪格 Sun佐伊  小a懿 南妹儿呀 夏只只i 性感热舞阿离 乔妹eve 大宝好哇塞呀  宝儿lucky 暴躁的鹿鹿猪  王羽杉Barbieshy 陈小花呢 Lovely璐璐酱 猫九酱O3O      暴走小卡车 萌宝绵绵Z啊 王羽杉Barbieshy 米儿啊i 素素不吃肉  淼淼喵酱呀 是Ari瑞哥 
+# 腐团儿 Minana呀 苏恩Olivia Chance喵  张琪格 Sun佐伊  小a懿 南妹儿呀 夏只只i 性感热舞阿离 乔妹eve 大宝好哇塞呀  宝儿lucky 暴躁的鹿鹿猪  王羽杉Barbieshy 陈小花呢 Lovely璐璐酱 猫九酱O3O      暴走小卡车 萌宝绵绵Z啊 王羽杉Barbieshy 米儿啊i 素素不吃肉  淼淼喵酱呀 是Ari瑞哥 
 # 湖南小橙子 沈亦Mona 尹恩恩1 VIVI小小酥 阿让让丶 Y智恩 何菱
 
 # 秀秀呢 lone考拉  你的咪咪酱 子诺小姐姐 Ss莹莹酱 珊儿兔兔兔 MICO要抱抱 子然学姐 舞法天女小慕林 Ellin艾琳  同桌小美 Sunny温晴
-# 你的口罩表妹 陈小花呢 血色东霓 秀秀呢
+# 你的口罩表妹 陈小花呢 血色东霓 秀秀呢 王雨檬呀 温柠c丶 下凡的张美男 上蓝冰儿
 
 
 
-DirName = "Minana呀"
+DirName = "温柠c丶"
 
 def analysisFileName():
     fileName = DirName
@@ -82,6 +82,7 @@ if __name__=="__main__":
             file_url = value
     print(file_url)
     
+    last_work_time = time.time()
     is_dispersed = get_is_dispersed(file_url)
     if is_dispersed:
         print('current index is:%s'%(get_dispersed_index(file_url)))
@@ -102,9 +103,17 @@ if __name__=="__main__":
                 print('reach maxmium times of try, exit')
                 break
             continue
+        if time.time() - last_work_time < 2:
+            time.sleep(10)
+            print('too fast, stop download!')
+            continue
+        else:
+            last_work_time = time.time()
+            
         connectTryCount = 0
         count = 0
         fileName = getNextFileName(fileName)
+
         print('start download to ', fileName)
         with open(fileName, "wb") as pdf:
             try:
